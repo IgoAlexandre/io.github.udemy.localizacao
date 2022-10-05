@@ -38,6 +38,29 @@ public class LocalizacaoApplication implements CommandLineRunner {
 		System.out.println("###########################Paginado##########################");
 		Pageable pageable = PageRequest.of(0, 3);
 		cidadeService.listarCidadesPorNomeSortPaginado("%%%%", pageable);
+
+
+		System.out.println("###########################Utilizando Example##########################");
+		var cidade =  new Cidade(null, "Porto Alegre", null);
+		cidadeService.filtroDinamico(cidade).forEach(System.out::println);
+
+		System.out.println("###########################Utilizando Specifcation##########################");
+		cidadeService.listarCidadesByNomeCidadeSpecs();
+
+		cidadeService.listarCidadesByQtdHabitantesGreaterThan();
+
+		cidadeService.listarCidadesByNomeCidadeAndQtdHabitantesGreaterThan("Brasilia", 5000L);
+
+		System.out.println("###########################Utilizando Specifcation Dinâmico##########################");
+		var cidadeDinamico = new Cidade(1L,null,null);
+		cidadeService.listarCidadesSpecsDinamico(cidadeDinamico);
+
+		System.out.println("###########################SQL NATIVO##########################");
+		cidadeService.listarCidadesPorNomeSqlNativo("Brasilia");
+
+		System.out.println("###########################SQL NATIVO PROJECTION##########################");
+		cidadeService.listarCidadesPorNomeSqlNativoProjection("Brasilia");
+
 	}
 
 

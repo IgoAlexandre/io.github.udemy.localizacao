@@ -1,14 +1,23 @@
 package io.github.udemy.localizacao.domain.repository;
 
 import io.github.udemy.localizacao.domain.entity.Cidade;
+import io.github.udemy.localizacao.domain.repository.projections.CidadeProjection;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface CidadeRepository extends JpaRepository<Cidade, Long> {
+public interface CidadeRepository extends JpaRepository<Cidade, Long>, JpaSpecificationExecutor<Cidade> {
+
+    @Query(nativeQuery = true, value = "Select * from Cidade c where c.nome_cidade =:nomeCidade")
+    List<Cidade> findByNomeCidadeSqlNativo(@Param("nomeCidade") String nomeCidade);
+
+    @Query(nativeQuery = true, value = "Select id_cidade IdCidade, nome_cidade NomeCidade from Cidade c where c.nome_cidade =:nomeCidade")
+    List<CidadeProjection> findByNomeCidadeSqlNativoProjection(@Param("nomeCidade") String nomeCidade);
 
     List<Cidade> findByNomeCidade(String nomeCidade);
 
